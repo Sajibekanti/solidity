@@ -677,7 +677,7 @@ bool ExpressionCompiler::visit(FunctionCall const& _functionCall)
 				m_context << errorCase;
 			}
 			else
-				m_context.appendConditionalRevert(true, "Uncaught exception in contract creation");
+				m_context.appendConditionalRevert(true);
 			break;
 		}
 		case FunctionType::Kind::SetGas:
@@ -734,7 +734,8 @@ bool ExpressionCompiler::visit(FunctionCall const& _functionCall)
 			{
 				// Check if zero (out of stack or not enough balance).
 				m_context << Instruction::ISZERO;
-				m_context.appendConditionalRevert(true, "Transfer failed");
+				// Revert message bubbles up.
+				m_context.appendConditionalRevert(true);
 			}
 			break;
 		case FunctionType::Kind::Selfdestruct:
@@ -2341,7 +2342,7 @@ void ExpressionCompiler::appendExternalFunctionCall(
 	{
 		// Propagate error condition (if CALL pushes 0 on stack).
 		m_context << Instruction::ISZERO;
-		m_context.appendConditionalRevert(true, "Uncaught exception");
+		m_context.appendConditionalRevert(true);
 	}
 	else
 		m_context << swapInstruction(remainsSize);

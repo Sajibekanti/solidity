@@ -165,7 +165,6 @@ void CompilerUtils::accessCalldataTail(Type const& _type)
 				if sgt(base_ref, sub(calldatasize(), mul(length, <calldataStride>))) { revert(0, 0) }
 			})")
 			("calldataStride", toCompactHexWithPrefix(calldataStride))
-			// TODO add test
 			("revertString", m_context.revertReasonIfDebug("Invalid calldata tail length"))
 			.render(),
 			{"base_ref", "length"}
@@ -819,6 +818,7 @@ void CompilerUtils::convertType(
 			solAssert(enumType.numberOfMembers() > 0, "empty enum should have caused a parser error.");
 			m_context << u256(enumType.numberOfMembers() - 1) << Instruction::DUP2 << Instruction::GT;
 			if (_asPartOfArgumentDecoding)
+				// TODO add test
 				m_context.appendConditionalRevert(false, "Enum out of range");
 			else
 				m_context.appendConditionalInvalid();

@@ -952,7 +952,8 @@ void ContractCompiler::handleCatch(vector<ASTPointer<TryCatchClause>> const& _ca
 				revert(0, returndatasize())
 			})");
 		else
-			m_context.appendRevert("Uncaught exception thrown");
+			// Since both returndata and revert are >=byzantium, this should be unreachable.
+			solAssert(false, "");
 	}
 	m_context << endTag;
 }
